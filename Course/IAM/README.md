@@ -7,7 +7,7 @@ Allows you to manage users and their level of access to the AWS console.
 ## IAM Consist of the following
 
 * Users: People, end users.
-* Groups: Collection of users.
+* Groups: Collection of users, users in the groud will inherited the policy from the group.
 * Policies: Are basically the Permissions. Are made up of Documents, formatted in JSON.
 * Roles: Is a way to allow one part of AWS to another part.
 
@@ -15,12 +15,12 @@ Allows you to manage users and their level of access to the AWS console.
 
 * Centralised control of your AWS account.
 * Shared Access to your AWS account.
-* Gives you granular Permission.
-* Does Identity Federation (Active directory, Facebook, etc)
-* MultiFactor Authentication.
+* Gives you granular Permission (differentiates authority levels).
+* Does Identity Federation (Active directory, Facebook, etc), your users can use account for other entity for the AWS
+* MultiFactor Authentication, when you logging in, you need the authentication code not only the username and password.
 * Provides temporary access for users/devices etc.
-* Allows you to set up your own password rotation policy.
-* Supports PCI DSS compliance.
+* Allows you to set up your own password rotation policy, for example you can let the user set new password in a period.
+* Supports PCI DSS compliance, compliant with credit card policy etc.
 * integrated with a lot of AWS services.
 
 ## [From Console](https://aws.amazon.com/console/)
@@ -45,3 +45,5 @@ Before doing it you probably have to go on:
 and enable: Receive Billing Alerts
 
 After that, you can go and use cloudwatch services to set a new Billing Alarm
+
+## IAM Lab
