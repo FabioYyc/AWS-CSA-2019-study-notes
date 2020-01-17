@@ -1,19 +1,22 @@
 # CHAPTER 3 | S3 Object Storage and CDN
 
 ## S3
+### Read S3 FAQ before exams
 
 ### [What's S3](https://aws.amazon.com/s3/)
 
-* Object-based storage: you can save only object, you can't, for example, install an OS (In this case you need block-based storage).
+* Safe place to store files
+* Object-based storage: you can save only object (flat files, like jpg, txt etc.), you can't, for example, install an OS (In this case you need block-based storage).
 * Files can save from 0 Bytes to 5 TB.
 * No storage Limits.
 * Files are stored in Buckets (a folder in a cloud).
-* S3 is a universal namespace, the name must be unique globally. So you **cannot** have the same name as someone else.
+* S3 bucket is a universal namespace, the name must be unique globally. So you **cannot** have the same name as someone else.
 * Sample of an S3 URL: ```https://s3-eu-west-1.amazonaws.com/yourbucket```.
-* When you upload an object in S3 you get an HTTP 200 OK code back.
+* When you upload (Post) an object in S3 you get an HTTP 200 OK code back.
 
 ### Data Consistency for S3
-
+* Read after write consistency for PUTs: if a file is uploaded to S3, you can read it immeidately 
+* Eventual consistency: if you uploaded a new version, you may read version 1 before overwriting or deletes propagated
 * It's consistent in reads after a write on new objects.
 * It's eventually consistent for overwriting and deletes (this means it can take some time to propagate)
 * S3 is spread across multiple AZ's
@@ -22,8 +25,8 @@
 
 * S3 is an object. Objects consist of:
   * Key (name of the object)
-  * Value (data)
-  * Version ID (Used on versioning)
+  * Value (data in bytes)
+  * Version ID (Used on versioning, you can multiple version of the file)
   * Metadata (a set of data that describes and gives information about the object data.)
   * Subresources:
     * Access Control List (Decide who can access files)
@@ -35,17 +38,19 @@
 * S3 is built for 99.99%
 * S3 guarantees 11x9s (99.999999999) durability for S3 information.
 * Tiered Storage (classes) available
-* You can have lifecycle management
+* You can have lifecycle management: files can be move around tiers based on their age
 * Versioning
 * Supports [multi-part upload](https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html)
 * Encryption
 * Access control (permissions on single files) and bucket policies (permissions on buckets)
+* Multi-factor authentication to delete the object
 
-### [S3 Storage Tiers](https://aws.amazon.com/s3/storage-classes/)
+### [S3 Storage Tiers](https://aws.amazon.com/s3/storage-classes/) -> Important for exams
 
-* S3 standard: 99.99% availability 11x9s durability (it sustains the loss of 2 facilities concurrently)
+* S3 standard: 99.99% availability 11x9s durability (it sustains the loss of 2 facilities concurrently), stored redundant across facilities
 * S3 IA: (Infrequently Accessed): For data that is accessed less frequently, but needs rapid access. You are charged a retrieval fee per GB retrieved
-* S3 One Zone IA: Like S3 IA but data is stored only in one AZ
+* S3 One Zone IA: Like S3 IA but data is stored only in one AZ, low cost option of IA.
+* S3 Intelligent Tiering: uses machine learning to optimize the cost by moving data across tiers
 * Glacier: Most cheap, used for archival only.
   * Expedited: few minutes for retrieval
   * Standard: 3-5 hours for retrieval
@@ -53,6 +58,7 @@
   * It encrypts data by default
   * Regionally availability
   * Designed with 11x9s durability, like S3
+* Glacier deep archive: retrival time 12 hours
 
 ### [Charges](https://aws.amazon.com/s3/pricing/)
 
@@ -63,6 +69,12 @@ S3 is charged for:
 * Storage management pricing
 * Data Transfer Pricing
 * Transfer acceleration (it's using CloudFront the AWS CDN) using edge locations
+* Cross region replication
+
+### Creating bucket note
+* If the object is not made public, the url will return access denied (An xml file)
+* You can change the permission to make the object public
+* We can change the tiering in object level and bucket level
 
 ### [Server side Encryption and ACL](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html)
 
@@ -96,6 +108,7 @@ S3 is charged for:
 ### [S3 Cross region replication](https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html)
 
 * Regions must be unique
+* If you uploaded a new file and turned on the service, the new file will be replicated to a new region
 * Cross region replication doesn't replicate existing object by default, only new ones (after the replicate is set) will be replicated automatically.
 * In order to replicate the existing objects, you need to do a `cp` using the aws cli:
 
