@@ -83,17 +83,21 @@ S3 is charged for:
 * Server-Side Encryption with Customer-Provided Keys (SSE-C)
 
 * Control access to the bucket using bucket ACL or Bucket policies
-* By default all buckets and objects within are private
+* By default all buckets and objects within are private 
 
 ### [S3 Version Control](https://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html)
 
-* Once you enable versioning, you can't disable it, you can only suspend it. A way of disabling it is to delete the bucket and re-create it
-* Every time you update an object, it will become private by default.
+* Once you enable versioning in the bucket, you can't disable it, you can only suspend it. A way of disabling it is to delete the bucket and re-create it
+* Every time you update an object, it will become private by default, you will need to make it public again in action options.
+* If you make older version public, and you uploaded a new version, new version cannot be access before you make it public, but you can access the content of older version
 * It integrates with Lifecycle rules.
 * You pay for each version you have
+* Size of the file will be sum of different versions -> You might need lifecycle policies to retire versions quickly
 * Delete an object:
 
+
     Once you delete a file inside a versioned bucket, you don't delete the file, you simply add a Delete Marker (this basically creates a new version of the object)
+    
     If you delete the version with the Detele Marker you will basically restore the object.
 
     If you want to permanently delete the object, you have to delete all the Versions of the object.
@@ -138,14 +142,15 @@ Only creations and modifications are replicated to the bucket in the other regio
 * Access control for buckets:
   * Bucket policies: Permission bucket wide
   * Access control list: Permissions that can be applied to the single object
+  * can configure access log -> logs all requests to the bucket
 
 * Encryption:
-  * In transit: from to your bucket, HTTPS for example
-  * At rest:
+  * In transit: from to your bucket, HTTPS for example (traffic is encrypted in transit), achieved by ssl or t;s
+  * At rest: encrypt data been stored
     * Server-side encryption:
-      * S3 Managed Keys: SSE-S3 (Keys are managed by S3)
-      * Key Management Service: SS3-KMS the customer manages the keys
-      * Server-side encryption: Here you manage the keys, and Amazon manage the writes
+      * S3 Managed Keys: SSE-S3 (Keys are managed by S3), automatically managed the keys
+      * Key Management Service: SS3-KMS the customer manages the keys, you and amazon managed the key together
+      * Server-side encryption: Here you manage the keys, and Amazon manage the writes, customer provided key
   * Client-side Encryption: You encrypt the data and you upload it encrypted to S3
 
 ## [Amazon Storage](https://aws.amazon.com/products/storage/)
