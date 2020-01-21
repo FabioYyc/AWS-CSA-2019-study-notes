@@ -90,7 +90,8 @@ S3 is charged for:
 * Once you enable versioning in the bucket, you can't disable it, you can only suspend it. A way of disabling it is to delete the bucket and re-create it
 * Every time you update an object, it will become private by default, you will need to make it public again in action options.
 * If you make older version public, and you uploaded a new version, new version cannot be access before you make it public, but you can access the content of older version
-* It integrates with Lifecycle rules.
+* It integrates with Lifecycle rules: you can use prefix or tag to apply lifecycle rule, the verision which lifecycle rules will be applied on can be specify as well.
+* You can set expire day of your files in lifecycle setting
 * You pay for each version you have
 * Size of the file will be sum of different versions -> You might need lifecycle policies to retire versions quickly
 * Delete an object:
@@ -112,12 +113,16 @@ S3 is charged for:
 ### [S3 Cross region replication](https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html)
 
 * Regions must be unique
+* Versioning is required to be enabled for cross region replication
 * If you uploaded a new file and turned on the service, the new file will be replicated to a new region
 * Cross region replication doesn't replicate existing object by default, only new ones (after the replicate is set) will be replicated automatically.
+* New version of file will be automatically replicate to the CRR bucket
 * In order to replicate the existing objects, you need to do a `cp` using the aws cli:
 
     `aws s3 cp --recursive s3://alessio-casco-versioning s3://alessio-casco-versioning-replica-sydney`
-* If you delete an object in the primary bucket, the delete action and markers won't be done or replicated in your remote bucket, this is a security function.
+* If you delete an object in the primary bucket, the delete action and markers won't be done or replicated in your remote bucket, this is a security function, so the accidental delete will not spread between buckets
+(delete delete marker will restore the object)
+* deleting individual version or delete marker will also not be replicated
 Only creations and modifications are replicated to the bucket in the other regions NOT the delete
 * You can't replicate over multiple buckets, the maps are always 1-to-1
 
